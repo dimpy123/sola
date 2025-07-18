@@ -686,7 +686,7 @@ const SolaInsuranceWebsite = () => {
       // Enhanced: Regional comparison analysis
       const regionalComparison = calculateRegionalComparison(allYearlyData);
       
-      // Enhanced: Buffer zone statistical analysis
+      // Enhanced: Buffer zone statistical analysis testing
       const bufferZoneResults: any = {};
       bufferDistances.forEach(distance => {
         const key = `${distance}m`;
