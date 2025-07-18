@@ -934,8 +934,6 @@ const SolaInsuranceWebsite = () => {
                             <div className="text-sm text-gray-600 space-y-1">
                               <div>Events: {data.totalEvents}</div>
                               <div>Rate: {(data.annualProbability * 100).toFixed(2)}%</div>
-                              <div>Payout: ${data.expectedPayout.toFixed(0)}</div>
-                              <div className="text-xs">CI: ${data.confidenceInterval[0].toFixed(0)}-${data.confidenceInterval[1].toFixed(0)}</div>
                             </div>
                           </div>
                         ))}
