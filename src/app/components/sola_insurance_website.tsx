@@ -686,7 +686,7 @@ const SolaInsuranceWebsite = () => {
       // Enhanced: Regional comparison analysis
       const regionalComparison = calculateRegionalComparison(allYearlyData);
       
-      // Enhanced: Buffer zone statistical analysis testing
+      // Enhanced: Buffer zone statistical analysis
       const bufferZoneResults: any = {};
       bufferDistances.forEach(distance => {
         const key = `${distance}m`;
@@ -822,7 +822,63 @@ const SolaInsuranceWebsite = () => {
       </header>
 
       <main className="max-w-4xl mx-auto px-6 py-8">
-
+        <div className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-lg p-8 mb-8 shadow-lg">
+          <div className="flex items-center space-x-3 mb-4">
+            <Calculator className="w-8 h-8" />
+            <h2 className="text-2xl font-bold">Enhanced Statistical Analysis</h2>
+          </div>
+          
+          {processingResults?.enhancedAnalysis ? (
+            <div className="text-center">
+              <div className="text-5xl font-bold mb-2">
+                ${processingResults.enhancedAnalysis.combinedEstimate.expectedPayout.toFixed(0)}
+              </div>
+              <div className="text-xl opacity-90">Enhanced Expected Annual Payout</div>
+              <div className="mt-4 text-sm opacity-80">
+                {processingResults.enhancedAnalysis.combinedEstimate.methodology}
+              </div>
+              <div className="mt-4 bg-white/10 rounded-lg p-4">
+                <div className="text-lg font-semibold mb-2">Enhanced Model vs Basic Model</div>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+                  <div>
+                    <div className="font-semibold">Basic Model</div>
+                    <div>${processingResults.summary.expectedPayout.toFixed(0)}</div>
+                    <div className="text-xs opacity-80">Point-in-polygon only</div>
+                  </div>
+                  <div>
+                    <div className="font-semibold">Enhanced Model</div>
+                    <div>${processingResults.enhancedAnalysis.combinedEstimate.expectedPayout.toFixed(0)}</div>
+                    <div className="text-xs opacity-80">Spatial + Regional</div>
+                  </div>
+                  <div>
+                    <div className="font-semibold">Improvement</div>
+                    <div className={`${processingResults.enhancedAnalysis.combinedEstimate.improvementVsBasic >= 0 ? 'text-green-200' : 'text-red-200'}`}>
+                      {processingResults.enhancedAnalysis.combinedEstimate.improvementVsBasic.toFixed(1)}%
+                    </div>
+                    <div className="text-xs opacity-80">Change from basic</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ) : (
+            <div className="text-center">
+              <div className="text-5xl font-bold mb-2">$2,847</div>
+              <div className="text-xl opacity-90">Expected Future Annual Payout</div>
+              <div className="mt-4 text-sm opacity-80">
+                Based on statistical distribution modeling of 2011-2020 hail data
+              </div>
+              <div className="mt-4 bg-white/10 rounded-lg p-4">
+                <div className="text-lg font-semibold mb-2">Statistical Model Details</div>
+                <div className="text-sm space-y-1">
+                  <div>Distribution: Binomial with uncertainty correction</div>
+                  <div>Historical Rate: 30% ± 14.5% (95% CI)</div>
+                  <div>Expected Future Rate: 28.47%</div>
+                  <div>Future Expected Value = 0.2847 × $10,000 = $2,847</div>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
 
         <div className="bg-white rounded-lg shadow-md border border-gray-200 p-6 mb-6">
           <h2 className="text-xl font-semibold text-gray-800 mb-4">Policy Details</h2>
@@ -934,6 +990,8 @@ const SolaInsuranceWebsite = () => {
                             <div className="text-sm text-gray-600 space-y-1">
                               <div>Events: {data.totalEvents}</div>
                               <div>Rate: {(data.annualProbability * 100).toFixed(2)}%</div>
+                              <div>Payout: ${data.expectedPayout.toFixed(0)}</div>
+                              <div className="text-xs">CI: ${data.confidenceInterval[0].toFixed(0)}-${data.confidenceInterval[1].toFixed(0)}</div>
                             </div>
                           </div>
                         ))}
@@ -1021,66 +1079,6 @@ const SolaInsuranceWebsite = () => {
         </div>
 
         {processingResults && <HailMap />}
-
-        {processingResults && <div className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-lg p-8 mb-8 shadow-lg">
-          <div className="flex items-center space-x-3 mb-4">
-            <Calculator className="w-8 h-8" />
-            <h2 className="text-2xl font-bold">Statistical Analysis</h2>
-          </div>
-          
-          {processingResults?.enhancedAnalysis ? (
-            <div className="text-center">
-              <div className="text-5xl font-bold mb-2">
-                ${processingResults.enhancedAnalysis.combinedEstimate.expectedPayout.toFixed(0)}
-              </div>
-              <div className="text-xl opacity-90">Enhanced Expected Annual Payout</div>
-              <div className="mt-4 text-sm opacity-80">
-                {processingResults.enhancedAnalysis.combinedEstimate.methodology}
-              </div>
-              <div className="mt-4 bg-white/10 rounded-lg p-4">
-                <div className="text-lg font-semibold mb-2">Enhanced Model vs Basic Model</div>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
-                  <div>
-                    <div className="font-semibold">Basic Model</div>
-                    <div>${processingResults.summary.expectedPayout.toFixed(0)}</div>
-                    <div className="text-xs opacity-80">Point-in-polygon only</div>
-                  </div>
-                  <div>
-                    <div className="font-semibold">Enhanced Model</div>
-                    <div>${processingResults.enhancedAnalysis.combinedEstimate.expectedPayout.toFixed(0)}</div>
-                    <div className="text-xs opacity-80">Spatial + Regional</div>
-                  </div>
-                  <div>
-                    <div className="font-semibold">Improvement</div>
-                    <div className={`${processingResults.enhancedAnalysis.combinedEstimate.improvementVsBasic >= 0 ? 'text-green-200' : 'text-red-200'}`}>
-                      {processingResults.enhancedAnalysis.combinedEstimate.improvementVsBasic.toFixed(1)}%
-                    </div>
-                    <div className="text-xs opacity-80">Change from basic</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          ) : (
-            <div className="text-center">
-              <div className="text-5xl font-bold mb-2">$2,847</div>
-              <div className="text-xl opacity-90">Expected Future Annual Payout</div>
-              <div className="mt-4 text-sm opacity-80">
-                Based on statistical distribution modeling of 2011-2020 hail data
-              </div>
-              <div className="mt-4 bg-white/10 rounded-lg p-4">
-                <div className="text-lg font-semibold mb-2">Statistical Model Details</div>
-                <div className="text-sm space-y-1">
-                  <div>Distribution: Binomial with uncertainty correction</div>
-                  <div>Historical Rate: 30% ± 14.5% (95% CI)</div>
-                  <div>Expected Future Rate: 28.47%</div>
-                  <div>Future Expected Value = 0.2847 × $10,000 = $2,847</div>
-                </div>
-              </div>
-            </div>
-          )}
-        </div>}
-
-        
 
         <div className="bg-white rounded-lg shadow-md border border-gray-200 p-6 mb-6">
           <h2 className="text-xl font-semibold text-gray-800 mb-4 flex items-center">
