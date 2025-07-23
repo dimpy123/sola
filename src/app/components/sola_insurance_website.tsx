@@ -877,7 +877,7 @@ const SolaInsuranceWebsite = () => {
                 <div className="text-sm space-y-1">
                   <div>Distribution: Binomial with uncertainty correction</div>
                   <div>Historical Rate: 10% ± 14.5% (95% CI)</div>
-                  <div>Expected Future Rate: 28.47%</div>
+                  <div>Expected Future Rate: 12.9%</div>
                   <div>Future Expected Value = 0.129 × $10,000 = $1,290</div>
                 </div>
               </div>
