@@ -151,25 +151,29 @@ const SolaInsuranceWebsite = () => {
   };
 
   const regionalBenchmarkLocations = [
-    { name: "Downtown Dallas", coords: [32.7767, -96.7970] as [number, number] },
-    { name: "Dallas Love Field", coords: [32.8474, -96.8517] as [number, number] },
-    { name: "Fair Park", coords: [32.7828, -96.7647] as [number, number] },
-    { name: "Deep Ellum", coords: [32.7831, -96.7836] as [number, number] },
-    { name: "Uptown Dallas", coords: [32.8067, -96.8028] as [number, number] },
-    { name: "Bishop Arts District", coords: [32.7545, -96.8217] as [number, number] }
+    { name: "Downtown Dallas", coords: [-96.7970, 32.7767] as [number, number] },
+    { name: "Dallas Love Field", coords: [ -96.8517, 32.8474] as [number, number] },
+    { name: "Fair Park", coords: [-96.7647, 32.7828] as [number, number] },
+    { name: "Deep Ellum", coords: [-96.7836, 32.7831] as [number, number] },
+    { name: "Uptown Dallas", coords: [-96.8028, 32.8067] as [number, number] },
+    { name: "Bishop Arts District", coords: [-96.8217, 32.7545] as [number, number] }
   ];
 
   const calculateRegionalComparison = (allYearlyData: any[]) => {
     const bufferDistances = [1000, 2000, 5000]; // 1km, 2km, 5km
-    
+    console.log(allYearlyData);
     const locationAnalysis = regionalBenchmarkLocations.map(location => {
+      console.log(`Analyzing location: ${location.name} at coords:`, location.coords);
       let totalTriggers = 0;
       let totalYears = allYearlyData.length;
       let bufferResults: any = {};
 
       allYearlyData.forEach(yearData => {
+        console.log(`Processing year ${yearData.year} for location ${location.name}`);
         if (yearData.geoJsonData) {
           // Check direct hits
+          console.log(`Checking year ${yearData.year} for triggers at ${location.name}`);
+          console.log(location.coords, yearData.geoJsonData);
           const triggered = checkHailTrigger(location.coords, yearData.geoJsonData);
           if (triggered) totalTriggers++;
 
@@ -263,6 +267,7 @@ const SolaInsuranceWebsite = () => {
     for (const feature of geoJsonData.features) {
       if (feature.geometry?.type === 'Polygon') {
         if (pointInPolygon(targetLocation, feature.geometry.coordinates[0])) {
+          console.log(`Hit polygon at ${targetLocation} in year ${feature.properties?.year || 'unknown'}`);
           console.log(feature.geometry.coordinates[0]);
           return true;
         }
@@ -317,7 +322,7 @@ const SolaInsuranceWebsite = () => {
         console.log(`Adding marker for ${location.name} at coords:`, location.coords);
         console.log(location)
         new (window as any).google.maps.Marker({
-          position: { lat: location.coords[0], lng: location.coords[1] },
+          position: { lat: location.coords[1], lng: location.coords[0] },
           map: googleMap,
           title: location.name,
           icon: {
@@ -862,7 +867,7 @@ const SolaInsuranceWebsite = () => {
             </div>
           ) : (
             <div className="text-center">
-              <div className="text-5xl font-bold mb-2">$2,847</div>
+              <div className="text-5xl font-bold mb-2">$1,290</div>
               <div className="text-xl opacity-90">Expected Future Annual Payout</div>
               <div className="mt-4 text-sm opacity-80">
                 Based on statistical distribution modeling of 2011-2020 hail data
@@ -871,9 +876,9 @@ const SolaInsuranceWebsite = () => {
                 <div className="text-lg font-semibold mb-2">Statistical Model Details</div>
                 <div className="text-sm space-y-1">
                   <div>Distribution: Binomial with uncertainty correction</div>
-                  <div>Historical Rate: 30% ± 14.5% (95% CI)</div>
+                  <div>Historical Rate: 10% ± 14.5% (95% CI)</div>
                   <div>Expected Future Rate: 28.47%</div>
-                  <div>Future Expected Value = 0.2847 × $10,000 = $2,847</div>
+                  <div>Future Expected Value = 0.129 × $10,000 = $1,290</div>
                 </div>
               </div>
             </div>
